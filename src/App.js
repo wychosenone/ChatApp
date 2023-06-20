@@ -1,23 +1,28 @@
-import {Route,Routes } from 'react-router-dom';
+import React from 'react';
+import { ChatEngine } from 'react-chat-engine';
+import ChatFeed from './Components/ChatFeed';
+import LoginForm from './Components/LoginForm';
+import './App.css';
 
-import AllMeetupsPage from './pages/AllMeetups';
-import NewMeetupPage from './pages/NewMeetup';
-import FavoritesPage from './pages/Favorites';
-import MainNavigation from './Components/layout/MainNavigation';
+const projectID = '87c726e8-d2df-4353-942a-8e8b5a05af35';
 
+const App = () => {
+  if (!localStorage.getItem('username')) return <LoginForm />;
 
-function App() {
   return (
-    <div>
-      <MainNavigation />
-      <Routes>
-        <Route path='/' element={<AllMeetupsPage />} />
-        <Route path='/new-meetup' element={<NewMeetupPage />} />
-        <Route path='/favorites' element={<FavoritesPage />} />
-      </Routes>
-    </div>
-    );
-  }
-
+    <ChatEngine
+      height="100vh"
+      projectID={projectID}
+      userName={localStorage.getItem('username')}
+      userSecret={localStorage.getItem('password')}
+      renderChatFeed={chatAppProps => <ChatFeed {...chatAppProps} />}
+      onNewMessage={() =>
+        new Audio(
+          'https://chat-engine-assets.s3.amazonaws.com/click.mp3'
+        ).play()
+      }
+    />
+  );
+};
 
 export default App;
